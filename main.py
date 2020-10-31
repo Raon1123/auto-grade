@@ -3,21 +3,25 @@ import re
 
 from studentclass import Student
 
-homework = "Homework 1" #FIXIT
-problem_n = 2 #FIXIT
-
+problem_n = 0
 student_list = []
 
+base_path = '.'
+test_path = base_path + '/test'
+source_path = base_path + '/source'
+student_path = base_path + '/student'
+
+def init():
+    global problem_n
+    problem_n = len(os.listdir(test_path))
+
+
 def readAssignment():
-    base_path = '.'
-    source_path = base_path + '/source'
-    student_path = base_path + '/student'
     parse_str = '[0-9]+\s[a-zA-Z ]+'
 
     os.system('rm -rf student')
 
-    if not ('student' in os.listdir(base_path)):
-        os.mkdir(student_path)
+    os.mkdir(student_path)
 
     parser = re.compile(parse_str)
 
@@ -51,11 +55,14 @@ def compileAssignment():
             if (('problem' + str(i) + '.cpp') in folder_list):
                 commend = 'g++ -o ' + folder_path + '/problem' + str(i) + '.out ' + folder_path + '/problem' + str(i) +  '.cpp'
                 os.system(commend)
+            elif (('Problem' + str(i) + '.cpp') in folder_list):
+                commend = 'g++ -o ' + folder_path + '/problem' + str(i) + '.out ' + folder_path + '/Problem' + str(i) +  '.cpp'
+                os.system(commend)
+            else:
+                print('File NOT found')
         
 
 def testAssignment():
-    base_path = '.'
-    test_path = base_path + '/test'
     score_list = []
 
     print('=== Read Score Data ===')
@@ -91,20 +98,17 @@ def testAssignment():
                     problem_input = test_path + '/problem' + str(i) + '/input_' + str(n+1) + '.txt'
                     answer_path = test_path + '/problem' + str(i) + '/output_' + str(n+1) + '.txt'
                     problem_output = folder_path +  '/output_' + str(i) + '.txt'
-                    
-                    commend = 'cp ' + problem_input + ' ' + folder_path + '/input_' + str(i) + '.txt'
-                    os.system(commend)
 
-                    commend = 'touch ' + folder_path + '/output_' + str(i) + '.txt'
+                    commend = 'cp ' + problem_input + ' ' + folder_path + '/input_' + str(i) + '.txt'
                     os.system(commend)
 
                     commend = 'cd ' + folder_path + ' && ./problem' + str(i) + '.out'
                     os.system(commend)
 
-                    commend = 'diff ' + problem_output + ' ' + answer_path + ' > ' + folder_path + '/report_problem_' + str(i) + '_test_' + str(n+1) + '.txt' 
+                    commend = 'diff ' + problem_output + ' ' + answer_path + ' > ' + folder_path + '/report_problem_' + str(i) + '_task_' + str(n+1) + '.txt' 
                     os.system(commend)
 
-                    report = open(folder_path + '/report_problem_' + str(i) + '_test_' + str(n+1) + '.txt' ,'r')
+                    report = open(folder_path + '/report_problem_' + str(i) + '_task_' + str(n+1) + '.txt' ,'r')
                     if report.read() == '':
                         student_score.append(score_list[i-1][n])
                     else:
@@ -113,13 +117,14 @@ def testAssignment():
                     commend = 'rm ' + folder_path + '/input_' + str(i) + '.txt'
                     os.system(commend)
 
-                    commend = 'mv ' + folder_path + '/output_' + str(i) + '.txt ' + folder_path + '/output_problem_' + str(i) + '_test_' + str(n+1) + '.txt' 
+                    commend = 'mv ' + folder_path + '/output_' + str(i) + '.txt ' + folder_path + '/output_problem_' + str(i) + '_task_' + str(n+1) + '.txt' 
                     os.system(commend)
             else:
                 for n in enumerate(score_list[i-1]):
                     student_score.append(0)
 
             s.append_scoreList(student_score)
+
 
 def individualReport():
     print('=== Make Individual Report ===')
@@ -140,11 +145,13 @@ def printReport():
 
 
 def main():
+    init()
     readAssignment()
     compileAssignment()
     testAssignment()
     individualReport()
     printReport()
+
 
 if __name__ == "__main__":
     main()

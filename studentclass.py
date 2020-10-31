@@ -35,14 +35,20 @@ class Student:
 
     def individualReport(self):
         report_path = self.get_folderPath() + '/individual_report.txt'
+
         report = open(report_path, 'w')
-        report.write('=== Report Id ' + self.id + ' ===\n')
+
+        report.write('=== Individual Score Report ===\n')
+        report.write('Student Name: ' + self.name + '\n')
+        report.write('Student Id: ' + self.id + '\n')
+
         score = 0
         for l in self.score_list:
             for s in l:
                 score += s
 
         report.write('=== Total: ' + str(score) + ' ===\n')
+
         for i, l in enumerate(self.score_list):
             report.write('=== Problem ' + str(i+1) + ' ===\n')
             for j, n in enumerate(l):

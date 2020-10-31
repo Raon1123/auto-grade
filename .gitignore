@@ -6,3 +6,5 @@
 
 # Files #
 *.zip
+*.pyc
+score_report.txt
