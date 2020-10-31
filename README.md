@@ -39,6 +39,7 @@ The number of problem starts 1.
 Under the problem, it needs two type of files, input and output.
 The file name of input is `input_` + `<Task number>` + `.txt`.
 The file name of output is `output_` + `<Task number>` + `.txt`.
+The file name of scores of each task is `score.txt`
 This program automatically reports the difference between students output and answer by `diff`.
 The report of compare is  `report_problem_` + `<problem number>` + `_task_` + `<task number>` + `.txt`.
 
